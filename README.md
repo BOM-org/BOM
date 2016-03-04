@@ -107,7 +107,7 @@ There are many binary structured message formats. BOM learn many aspects from [M
  * **string** represents string[]
  * **any** uses null tag _E_, represents any[], some like Object[] in java, but primary allowed.
  * **complicated** include object, tuple.
- * <b>NOTE T cannot be T[] self,</b> but multi-dimension array still supported. f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[12]
+ * <b>NOTE T cannot be T[] self, but multi-dimension array still supported.</b> f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[12]
 * object
  associcated-array. some same as string, object use 0..16 fast length, just one byte header. (FMV, I not use objects with more than 16 fields).<br/>
  <b>NOTE MsgPack name this type as map. because BOM introduce tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the "map" name not used in BOM</b>
