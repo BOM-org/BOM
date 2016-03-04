@@ -33,7 +33,7 @@ BOM is a binary object message format specification like ON, MsgPack
 ### special values
   * **null** is used in 2 usecases. 
    * **value** case, it represents a null value, f.e. object{special:null}
-   * **type** case, it represents any types, like Any in Scala, Object in Java. f.e. Tuple<int,float,string,null> means Tuple<int,float,string,Any>
+   * **type** case, it represents any types, like Any in Scala, Object in Java. f.e. Tuple(int,float,string,null) means Tuple(int,float,string,Any)
   * **magic** represents a magic value, used to handle schema, reference, headers, and so on.
   
 <a name="format"/>
