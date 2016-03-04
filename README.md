@@ -111,8 +111,8 @@ There are many binary structured message formats. BOM learns many aspects from [
  * **complicated** include object, tuple.
  * <b>NOTE T cannot be T[] self, but multi-dimension array is still supported.</b> <br/>f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[24]
 * **object** represents an associcated-array, a key-value pair array. Like the string type, object use 0..16 fast length header as well, just one byte header. <br/>(FMV, I did/will not use objects with more than 16 fields: ).<br/>
- <b>NOTE MsgPack names this type as map. because BOM introduces tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the name "map" is not used in BOM</b><br/>
- <b>NOTE the key of object is NOT limited to the string type, it can be any type except the null.</b>Through the key type is not string, there is no additional byte cost because most object.key string is short-length, just one byte header BX, CX or DX, [see table overview](#overview).
+ NOTE MsgPack names this type as map. because BOM introduces tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the name "map" is not used in BOM<br/>
+ NOTE the key of object is NOT limited to the string type, it can be any type except the null.Through the key type is not string, there is no additional byte cost because most object.key string is short-length, just one byte header BX, CX or DX, [see table overview](#overview).
 * **tuple**
  * **definition** A tuple is a finite ordered list of elements. In mathematics, an n-tuple is a sequence (or ordered list) of n elements, where n is a non-negative integer. see the definition from [wikipedia](https://en.wikipedia.org/wiki/Tuple)
  * **format** A tuple header is encoded as _D_N_XXXX. If n is odd, the last half byte should be magic value, f.e. _D_3_xxxF. <b>again NOTE 0xE used in tuple indicates any type</b>
