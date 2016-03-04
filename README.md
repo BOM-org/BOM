@@ -54,9 +54,6 @@ BOM is a binary object message format specification like ON, MsgPack
 </table>
 
 ### type tags
-There are most 16 kinds of type tag, so it's just a half byte.
- * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX, see [table](#overview)
- * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. maybe used in [schema declarations](#schema)
 
 <table>
  <tr><th>xxxx format</th><th>hex</th><th>description</th><th>followed data representation</th></tr>
@@ -66,11 +63,14 @@ There are most 16 kinds of type tag, so it's just a half byte.
  <tr><td>1001</td><td>9</td><td>double</td><td>[8 bytes]</td></tr>
  <tr><td>1010</td><td>A</td><td>string</td><td>[N][N bytes]</td></tr>
  <tr><td>1011</td><td>B</td><td>array, T[], 1 or multi Dimensions</td><td>1D: [T][+N][N values]<br/>mD: [T][-i][D0..Di][E(Di) values]</td></tr>
- <tr><td>1100</td><td>C</td><td>tuple<T0, T1...Tn></td><td>[N][T0..Tn][N values]</td></tr>
+ <tr><td>1100</td><td>C</td><td>tuple<T0, T1...Tn>, n>=2</td><td>[N][T0..Tn][N values]</td></tr>
  <tr><td>1101</td><td>D</td><td>object, array of key-value pair</td><td>[N][N pairs]</td></tr>
  <tr><td>1110</td><td>E</td><td>null</td><td>just single byte</td></tr>
  <tr><td>1111</td><td>F</td><td>magic</td><td>extensions</td></tr>
 </table>
+There are most 16 kinds of type tag, so it's just a half byte.
+ * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX, see [table](#overview)
+ * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. maybe used in [schema declarations](#schema)
 
 ### length representation
 there are 2 kinds of length reprententation
@@ -113,7 +113,11 @@ There are many binary structured message formats. BOM learn many aspects from [M
  * **complicated** include object, tuple.
  * <b>NOTE T cannot be T[] self, but multi-dimension array still supported.</b> f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[12]
 * object
- associcated-array. some same as string, object use 0..16 fast length, just one byte header. (FMV, I not use objects with more than 16 fields).<br/>
+ associcated-array is a key-value pair array. some same as string, object use 0..16 fast length, just one byte header. (FMV, I not use objects with more than 16 fields).<br/>
  <b>NOTE MsgPack name this type as map. because BOM introduce tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the "map" name not used in BOM</b>
+ <b>NOTE the key of object is NOT limited string type, it can be any type except the null.</b>Through the key type is not string, there is no additional byte cost because most object.key string is short-length, just one byte header BX, CX or DX.
 * tuple
- see the definition from [wikipedia](https://en.wikipedia.org/wiki/Tuple)
+ * **definition** A tuple is a finite ordered list of elements. In mathematics, an n-tuple is a sequence (or ordered list) of n elements, where n is a non-negative integer. see the definition from [wikipedia](https://en.wikipedia.org/wiki/Tuple)
+ * **format** A tuple header encoded as _D_N_XXXX, if n is odd, the last half byte use magic value, f.e. _D_3_xxxF. <b>again NOTE 0xE used in tuple, indicated any type</b>
+ * **object simplification** in object, all its pair use typed value. when many objects in message, the header byte complicating is a big waste. so the most efficient way is converting the object to tuple. f.e. point{x:float,y:float}[]==>points{field string[]:x,y;values:tuple<float,float>:1,2,3,4...
+ * **map** (https://en.wikipedia.org/wiki/Hash_table) object is equivelent to Tuple(Key,Any)[] where key cannot be null.
