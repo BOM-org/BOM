@@ -102,11 +102,9 @@ the length starts with a partial byte, and maybe follow bytes
 
 There are many binary structured message formats. BOM learns many aspects from [MsgPack.org](http://msgpack.org).
 * **little integer**
- BOM encodes little integer as just one byte, ranging with -32..-1 and 0..127, there is no additional byte to need.
-* **string**
- only UTF-8 encoding directly supported. In most usecases, there are only short strings. I did a simple statistics, most string length less than 64. MsgPack employs 32 fast length. BOM uses 0..47 as fast length, also just one byte header.
-* **array**
- a sequence of value. the best name should be T[], where T is the type of array element, all 14 types supported.
+ encoded  as just one byte in BOM, ranging with -32..-1 and 0..127, there is no additional byte to need.
+* **string** represents an UTF-8 format char sequence. In most programming usecases, there are only short strings. <br>I did a simple statistics: most string's length less than 64. MsgPack employs 32 fast length. <br>BOM uses 0..47 as fast length, also just one byte header.
+* **array** represents  a sequence of value. <br>the best name should be T[], where T is the type of array element, all 14 types supported.
  * **number** includes integers and floats
  * **string** represents string[]
  * **any** uses null tag _E_ which represents any[], like Object[] in java, but primary allowed.
