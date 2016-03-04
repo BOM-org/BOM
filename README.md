@@ -55,13 +55,13 @@ BOM is a binary object message format specification like ON, MsgPack
 ### type tags
 
 <table>
- <tr><th>xxxx format</th><th>hex</th><th>description</th><th>data representation</th></tr>
- <tr><td>0000-0011</td><td>0-3</td><td>singed integers, byte 1, 2, 3, 4</td><td>[_X][byte 1 2 4 8]</td></tr>
- <tr><td>0100-0111</td><td>4-7</td><td>unsigned integers, ubyte 1, 2, 3, 4</td><td>[_X][byte 1 2 4 8]</td></tr>
- <tr><td>1000</td><td>8</td><td>float</td><td>[_8][4 bytes]</td></tr>
- <tr><td>1001</td><td>9</td><td>double</td><td>[_9][8 bytes]</td></tr>
+ <tr><th>xxxx format</th><th>hex</th><th>description</th><th>followed data representation</th></tr>
+ <tr><td>0000-0011</td><td>0-3</td><td>singed integers, byte 1, 2, 3, 4</td><td>[byte 1 2 4 8]</td></tr>
+ <tr><td>0100-0111</td><td>4-7</td><td>unsigned integers, ubyte 1, 2, 3, 4</td><td>[byte 1 2 4 8]</td></tr>
+ <tr><td>1000</td><td>8</td><td>float</td><td>[4 bytes]</td></tr>
+ <tr><td>1001</td><td>9</td><td>double</td><td>[8 bytes]</td></tr>
  <tr><td>1010</td><td>A</td><td>string</td><td>[N][N bytes]</td></tr>
- <tr><td>1011</td><td>B</td><td>array, T[], 1 or multi Dimensions</td><td>1D:[T][+N][N values]<br/>multi-D: [T][-i][D0..Di][E(Di) values]</td></tr>
+ <tr><td>1011</td><td>B</td><td>array, T[], 1 or multi Dimensions</td><td>1D: [T][+N][N values]<br/>mD: [T][-i][D0..Di][E(Di) values]</td></tr>
  <tr><td>1100</td><td>C</td><td>tuple<T0, T1...Tn></td><td>[N][T0..Tn][N values]</td></tr>
  <tr><td>1101</td><td>D</td><td>object, array of key-value pair</td><td>[N][N pairs]</td></tr>
  <tr><td>1110</td><td>E</td><td>null</td><td>just single byte</td></tr>
