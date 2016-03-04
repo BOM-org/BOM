@@ -10,6 +10,7 @@ BOM is a binary object message format specification like ON, MsgPack
     * [special values](#special)
   * [format](#format)
   * [schema](#schema)
+  * [design explanation](#design)
 
 <a name="types"/>
 ## type system
@@ -30,7 +31,9 @@ BOM is a binary object message format specification like ON, MsgPack
   
 <a name="special"/>
 ### special values
-  * **null** represents a void value, a.k.a. nil, when it's used as value place. and as type, it represents any type, like Any in Scala, Object in Java.
+  * **null** is used in 2 usecases. 
+   * **value** case it represents a null value, f.e. object{special:null}
+   * **type** case, it represents any type, like Any in Scala, Object in Java. f.e. Tuple<int,float,string,null> means Tuple<int,float,string,Any>
   * **magic** represents a magic value, used to handle schema, reference, headers, and so on.
   
 <a name="format"/>
@@ -66,9 +69,9 @@ BOM is a binary object message format specification like ON, MsgPack
 </table>
 
 ### length representation
-there are 2 kind of length reprententations
+there are 2 kinds of length reprententation
 #### full bytes length 
-the length start with a full byte, follow variable-length bytes used
+the length starts with a full byte, and follows variable-length bytes
 <table>
  <tr><th>format</th><th>bits</th><th> max</th></tr>
  <tr><td>0xxx xxxx</td><td>7</td><td>`(2^7)-1`</td></tr>
@@ -78,7 +81,7 @@ the length start with a full byte, follow variable-length bytes used
 </table>
 
 #### partial bytes length
-the length start with a partial byte
+the length starts with a partial byte, and maybe follow bytes
 <table>
  <tr><th>format</th><th>bits</th><th> range</th></tr>
  <tr><td>string1</td><td>BX 0..15</td><td>byte[0]..byte[15]</td></tr>
@@ -88,3 +91,25 @@ the length start with a partial byte
 
 <a name="schema"/>
 ## schema
+
+
+<a name="design"/>
+## design explanation
+
+There are many binary structured message formats. BOM learn many aspects from [MsgPack.org](http://msgpack.org).
+* little integer
+ BOM encode little integer in just one byte, range from -32..-1, 0..127, there is no additional byte to need.
+* string
+ string, only UTF-8 encoding directly supported. In most usecases, there are only short strings. I did a simple statistics, most string length less than 64. MsgPack use 32 fast length. BOM use 0..47 as fast length, just one byte header.
+* array
+ a sequence of value. the best name should T[], where T is type of array element, all 14 type supported.
+ * **number** includes integers and floats, 10.
+ * **string** represents string[]
+ * **any** uses null tag _E_, represents any[], some like Object[] in java, but primary allowed.
+ * **complicated** include object, tuple.
+ * NOTE T cannot be T[] self, but multi-dimension array still supported. f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[12]
+* object
+ associcated-array. some same as string, object use 0..16 fast length, just one byte header. (FMV, I not use objects with more than 16 fields).<br/>
+ <b>NOTE MsgPack name this type as map. because BOM introduce tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the "map" name not used in BOM</b>
+* tuple
+ see the definition from [wikipedia](https://en.wikipedia.org/wiki/Tuple)
