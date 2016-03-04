@@ -47,7 +47,7 @@ BOM is a binary object message format specification like ON, MsgPack
  <tr><td>0xxx xxxx</td><td>00-7F</td><td>small integer range 0..127, compatible with singed and unsigned byte integer</td><td>just one byte</td></tr>
  <tr><td>1000 xxxx</td><td>80-8F</td><td>type tags</td><td>denpends</td></tr>
  <tr><td>1001 xxxx</td><td>9_X</td><td>object(n), n for number of pairs</td><td>[9N][N pairs]</td></tr>
- <tr><td>1010 xxxx</td><td>A_X</td><td>array(T) follow number of values</td><td>[AT][N][N values]</td></tr>
+ <tr><td>1010 xxxx</td><td>A_X</td><td>array(T), follows number of values</td><td>[AT][N][N values]</td></tr>
  <tr><td>1011 xxxx</td><td>B_X</td><td>string(n), 0..15</td><td>[x_N][N bytes]</td></tr>
  <tr><td>110x xxxx</td><td>C0-DF</td><td>string(n), n for length of UTF bytes, 16..47</td><td>[x_N][N bytes]</td></tr>
  <tr><td>111x xxxx</td><td>E0-FF</td><td>negative byte integer, range -1..-32</td><td>just one byte</td></tr>
