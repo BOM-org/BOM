@@ -39,6 +39,7 @@ BOM is a binary object message format specification like ON, MsgPack
 <a name="format"/>
 ## format
 
+<a name="overview"/>
 ### overview
 
 <table>
@@ -53,6 +54,9 @@ BOM is a binary object message format specification like ON, MsgPack
 </table>
 
 ### type tags
+There are most 16 kinds of type tag, so it's just a half byte.
+ * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX, see [table](#overview)
+ * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. maybe used in [schema declarations](#schema)
 
 <table>
  <tr><th>xxxx format</th><th>hex</th><th>description</th><th>followed data representation</th></tr>
