@@ -68,9 +68,9 @@ BOM is a binary object message format specification like ON, MsgPack
  <tr><td>1110</td><td>E</td><td>null</td><td>just single byte</td></tr>
  <tr><td>1111</td><td>F</td><td>magic</td><td>extensions</td></tr>
 </table>
-There are most 16 kinds of type tag, so it's just a half byte.
- * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX, see [table](#overview)
- * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. maybe used in [schema declarations](#schema)
+There are most 16 kinds of type tag, just a half byte.
+ * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX [see table overview](#overview)
+ * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. And myaybe used in [schema declarations](#schema)
 
 ### length representation
 there are 2 kinds of length reprententation
@@ -100,9 +100,9 @@ the length starts with a partial byte, and maybe follow bytes
 <a name="design"/>
 ## design explanation
 
-There are many binary structured message formats. BOM learn many aspects from [MsgPack.org](http://msgpack.org).
+There are many binary structured message formats. BOM learns many aspects from [MsgPack.org](http://msgpack.org).
 * little integer
- BOM encode little integer in just one byte, range from -32..-1, 0..127, there is no additional byte to need.
+ BOM encodes little integer as just one byte, range with -32..-1 and 0..127, there is no additional byte to need.
 * string
  string, only UTF-8 encoding directly supported. In most usecases, there are only short strings. I did a simple statistics, most string length less than 64. MsgPack use 32 fast length. BOM use 0..47 as fast length, just one byte header.
 * array
