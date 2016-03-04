@@ -104,15 +104,14 @@ There are many binary structured message formats. BOM learns many aspects from [
 * **little integer**
  encoded  as just one byte in BOM, ranging with -32..-1 and 0..127, there is no additional byte to need.
 * **string** represents an UTF-8 format char sequence. In most programming usecases, there are only short strings. <br>I did a simple statistics: most string's length less than 64. MsgPack employs 32 fast length. <br>BOM uses 0..47 as fast length, also just one byte header.
-* **array** represents  a sequence of value. <br>the best name should be T[], where T is the type of array element, all 14 types supported.
+* **array** represents  a sequence of value. It's T[], where T is the type of array element, all 14 types supported.
  * **number** includes integers and floats
  * **string** represents string[]
  * **any** uses null tag _E_ which represents any[], like Object[] in java, but primary allowed.
  * **complicated** include object, tuple.
- * <b>NOTE T cannot be T[] self, but multi-dimension array still supported.</b> f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[12]
-* **object**
- associcated-array is a key-value pair array. like the string type, object use 0..16 fast length, just one byte header. <br/>(FMV, I did/will not use objects with more than 16 fields: ).
- <b>NOTE MsgPack names this type as map. because BOM introduces tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the name "map" is not used in BOM</b>
+ * <b>NOTE T cannot be T[] self, but multi-dimension array is still supported.</b> <br/>f.e.  T[2][3][4] is encoded as  A_T_-3_2_3_4_V[24]
+* **object** represents an associcated-array, a key-value pair array. Like the string type, object use 0..16 fast length header as well, just one byte header. <br/>(FMV, I did/will not use objects with more than 16 fields: ).<br/>
+ <b>NOTE MsgPack names this type as map. because BOM introduces tuple(T...) to do generics work, Tuple(K,V)[] is same as java.util.Map type, so the name "map" is not used in BOM</b><br/>
  <b>NOTE the key of object is NOT limited to the string type, it can be any type except the null.</b>Through the key type is not string, there is no additional byte cost because most object.key string is short-length, just one byte header BX, CX or DX, [see table overview](#overview).
 * **tuple**
  * **definition** A tuple is a finite ordered list of elements. In mathematics, an n-tuple is a sequence (or ordered list) of n elements, where n is a non-negative integer. see the definition from [wikipedia](https://en.wikipedia.org/wiki/Tuple)
