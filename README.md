@@ -52,6 +52,8 @@ BOM is a binary object message format specification like ON, MsgPack
  <tr><td>110x xxxx</td><td>C0-DF</td><td>string(n), n for length of UTF bytes, 16..47</td><td>[x_N][N bytes]</td></tr>
  <tr><td>111x xxxx</td><td>E0-FF</td><td>negative byte integer, range -1..-32</td><td>just one byte</td></tr>
 </table>
+* **single byte** -32..-1 and 0..127  encoded as one byte, and null encoded as 0x8E
+* **length-head-data** except single byte, all other data encoding follow with length-header and length number of bytes, some after the type tag, some directly start the length-head-data without type tag.
 
 ### type tags
 
@@ -95,7 +97,7 @@ the length starts with a partial byte, and maybe follow bytes
 
 <a name="schema"/>
 ## schema
-
+### TODO
 
 <a name="design"/>
 ## design explanation
