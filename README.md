@@ -13,9 +13,12 @@ BOM is a binary object message format specification like ON, MsgPack
   * [design explanation](#design)
 
 <a name="types"/>
+
 ## type system
+  * There are 3 kinds of type
 
 <a name="primary"/>
+
 ### primary types
   * **Integer** represents a signed integer
   * **UInteger** represents an unsigned integer
@@ -24,22 +27,26 @@ BOM is a binary object message format specification like ON, MsgPack
   * **string** represents a UTF-8 string
   
 <a name="complicated"/>
+
 ### complicated types
   * **object** represents an associated-array, a.k.a. key-value pair array
   * **array** represents a single-typed value sequence
   * **tuple** represents a multiple-typed value sequence
   
 <a name="special"/>
+
 ### special values
-  * **null** is used in 2 usecases. 
+   * **null** is used in 2 usecases. 
    * **value** case, it represents a null value, f.e. object{special:null}
    * **type** case, it represents any types, like Any in Scala, Object in Java. f.e. Tuple(int,float,string,null) means Tuple(int,float,string,Any)
-  * **magic** represents a magic value, used to handle schema, reference, headers, and so on.
+   * **magic** represents a magic value, used to handle schema, reference, headers, and so on.
   
 <a name="format"/>
+
 ## format
 
 <a name="overview"/>
+
 ### overview
 
 <table>
@@ -52,6 +59,7 @@ BOM is a binary object message format specification like ON, MsgPack
  <tr><td>110x xxxx</td><td>C0-DF</td><td>string(n), n for length of UTF bytes, 16..47</td><td>[x_N][N bytes]</td></tr>
  <tr><td>111x xxxx</td><td>E0-FF</td><td>negative byte integer, range -1..-32</td><td>just one byte</td></tr>
 </table>
+
 * **single byte** -32..-1 and 0..127  encoded as one byte, and null encoded as 0x8E
 * **length-head-data** except single byte, all other data encoding follow with length-header and length number of bytes, some after the type tag, some directly start the length-head-data without type tag.
 
@@ -70,6 +78,7 @@ BOM is a binary object message format specification like ON, MsgPack
  <tr><td>1110</td><td>E</td><td>null</td><td>just single byte</td></tr>
  <tr><td>1111</td><td>F</td><td>magic</td><td>extensions</td></tr>
 </table>
+
 There are most 16 kinds of type tag, just a half byte.
  * **single byte tag** used in object.pair.value or any[], the type tag is 80-8F, or fast style, 9X,AX,BX,CX,DX [see table overview](#overview)
  * **half byte tag** used in array type, T[] is encoded as AT[N][n values]; used in tuple (T0, T1, T2, ... Tn), each two type tag form a byte, encoded as CTTTTT[n values]. And myaybe used in [schema declarations](#schema)
@@ -96,10 +105,13 @@ the length starts with a partial byte, and maybe follow bytes
 </table>
 
 <a name="schema"/>
+
 ## schema
+
 ### TODO
 
 <a name="design"/>
+
 ## design explanation
 
 There are many binary structured message formats. BOM learns many aspects from [MsgPack.org](http://msgpack.org).
